@@ -32,4 +32,8 @@ class Tower:
     def target_priority_change(self,count):
         self.target = self.targetting[count % len(self.targetting)]
 
+    def upgrade_tower(self):
+        pass
+
+    
 
