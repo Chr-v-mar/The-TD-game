@@ -1,3 +1,5 @@
+import math
+
 class Tower:
     def __init__(self, range, damge, cooldown, firerate, cost):
         self.range = range
@@ -22,7 +24,7 @@ class Tower:
 
     def cost_change(self):
         #return self.cost + self.cost **(self.cost_per_upgrade_rate * self.level)
-        new_cost = self.cost* self.cost_per_upgrade_rate *(2.71828 ** (self.level * self.cost_per_upgrade_rate))
+        new_cost = self.cost* self.cost_per_upgrade_rate *(math.e ** (self.level * self.cost_per_upgrade_rate))
         self.sell_return = new_cost//1.5
         return new_cost
 
