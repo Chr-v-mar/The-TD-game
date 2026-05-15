@@ -2,32 +2,59 @@ import pygame
 
 background_colour = (255,255,255)
 red = (255,0,0)
+blue = (0,0,255)
+green = (0,255,0)
 (width, height) = (1500, 750)
 
-screen = pygame.display.set_mode((width, height))
-pygame.display.set_caption('TD game')
-screen.fill(background_colour)
-pos = (0, 0)
-circle_list = []
 
-running = True
-while running:
-  for event in pygame.event.get():
-    if event.type == pygame.QUIT:
-      running = False
+class GameGUI:
 
-    if event.type == pygame.KEYDOWN:
-      if event.key == pygame.K_LEFT:
-          print('left')
-          pos = pygame.mouse.get_pos()
-          print(pos)
-          circle_list.append(pos)
+    def __init__(self):
+        pygame.init()
+        pygame.display.set_caption('TD game')
+        self.screen = pygame.display.set_mode([width, height])
+        self.screen.fill(background_colour)
+        self.pos = (0, 0)
+        self.circle_list = []
+        self.running = True
+
+    def main_loop(self):
+        while self.running:
+            self.handle_inputs()
+            self.draw()
+
+        pygame.quit()
+
+    def handle_inputs(self):
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                self.running = False
+
+        if pygame.mouse.get_pressed()[0]:
+            print('click')
+            self.pos = pygame.mouse.get_pos()
+            print(self.pos)
+            self.circle_list.append(self.pos)
+
+    def draw(self):
+        self.draw_background()
+        self.draw_towers()
+
+        pygame.display.flip()
+
+    def draw_background(self):
+        self.screen.fill(background_colour)
+
+    def draw_towers(self):
+        self.pos = pygame.mouse.get_pos()
+        for x, y in self.circle_list:
+            pygame.draw.circle(self.screen, red, (x, y), 10)
+        pygame.draw.circle(self.screen, blue, (self.pos[0], self.pos[1]), 10)
 
 
-    pos = pygame.mouse.get_pos()
-    screen.fill(background_colour)
-    for x,y in circle_list:
-        pygame.draw.circle(screen, red, (x, y), 10)
-    pygame.draw.circle(screen, red,(pos[0],pos[1]),10)
 
-    pygame.display.flip()
+if __name__ == "__main__":
+    game = GameGUI()
+    game.main_loop()
+
