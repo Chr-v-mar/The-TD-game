@@ -1,4 +1,5 @@
 import pygame
+import time
 
 background_colour = (255,255,255)
 red = (255,0,0)
@@ -18,6 +19,9 @@ class GameGUI:
         self.circle_list = []
         self.running = True
 
+    def math_function(self, option):
+        pass
+
     def main_loop(self):
         while self.running:
             self.handle_inputs()
@@ -36,6 +40,10 @@ class GameGUI:
             self.pos = pygame.mouse.get_pos()
             print(self.pos)
             self.circle_list.append(self.pos)
+            time.sleep(0.075)
+
+    def handle_append(self):
+        pass
 
     def draw(self):
         self.draw_background()
