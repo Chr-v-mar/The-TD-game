@@ -8,6 +8,9 @@ green = (0,255,0)
 (width, height) = (1500, 750)
 
 
+def cart_dist(pos1, pos2):
+    return ((pos1[0] - pos2[0])**2 + (pos1[1] - pos2[1])**2) ** 0.5
+
 class GameGUI:
 
     def __init__(self):
@@ -39,8 +42,10 @@ class GameGUI:
             print('click')
             self.pos = pygame.mouse.get_pos()
             print(self.pos)
-            self.circle_list.append(self.pos)
+            if not any(cart_dist(self.pos, existing_pos) < 15 for existing_pos in self.circle_list):
+                self.circle_list.append(self.pos)
             time.sleep(0.075)
+
 
     def handle_append(self):
         pass
