@@ -1,7 +1,7 @@
 import pygame
 import time
 
-background_colour = (255,255,255)
+background_colour = (155,255,200)
 red = (255,0,0)
 blue = (0,0,255)
 green = (0,255,0)
