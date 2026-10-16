@@ -4,7 +4,7 @@ from pprint import pprint
 from random import randint
 FPS = 60
 clock = pygame.time.Clock()
-map1 = "Berebav2.json"
+#map1 = "Berebav2.json"
 background_colour = (155,255,200)
 red = (255,0,0)
 blue = (0,0,255)
@@ -31,10 +31,10 @@ line1 = ((100,250), (300,250), 3)
 #with open("Berebav2.json", "w") as write_file:
     #json.dump(path, write_file)
 
-with open(map1,"r") as map_data:
-    data = json.load(map_data)
-    map_data.close()
-    pprint(data)
+#with open(map1,"r") as map_data:
+    #data = json.load(map_data)
+    #map_data.close()
+    #pprint(data)
     
 
 running = True
@@ -47,7 +47,7 @@ while running:
     dt = clock.tick(FPS)/1000 
     for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                self.running = False
+                running = False
     screen.fill("gold")
     #pygame.draw.rect(screen, "red", rect)
     #pygame.draw.polygon(screen, "orange", points1)

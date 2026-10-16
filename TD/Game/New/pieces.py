@@ -6,10 +6,19 @@ red = (255,0,0)
 blue = (0,0,255)
 green = (0,255,0)
 (width, height) = (1500, 750)
+path_points = [(000, 250), (300, 250), (600, 650), (1500, 750)]
 
 
 def cart_dist(pos1, pos2):
     return ((pos1[0] - pos2[0])**2 + (pos1[1] - pos2[1])**2) ** 0.5
+
+def cart_equation_of_line():
+    path_equations = []
+    for i in range(len(path_points)-1):
+        m = (path_points[i+1][1] - path_points[i][1]) / (path_points[i+1][0] - path_points[i][0])
+        c = path_points[i][1]- (m * path_points[i][0])
+        path_equations.append((m,c))
+
 
 class GameGUI:
 
@@ -52,6 +61,7 @@ class GameGUI:
 
     def draw(self):
         self.draw_background()
+        self.draw_path()
         self.draw_towers()
 
         pygame.display.flip()
@@ -64,6 +74,10 @@ class GameGUI:
         for x, y in self.circle_list:
             pygame.draw.circle(self.screen, red, (x, y), 10)
         pygame.draw.circle(self.screen, blue, (self.pos[0], self.pos[1]), 10)
+
+    def draw_path(self):
+        pygame.draw.lines(self.screen, "yellow", False,path_points , 5)
+
 
 
 
