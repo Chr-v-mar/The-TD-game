@@ -13,9 +13,34 @@ path_points = [(000, 250), (300, 250), (600, 650), (1500, 750)]
 
 
 def cart_dist(pos1, pos2):
+    """
+
+    Parameters
+    ----------
+    pos1
+    pos2
+
+    Returns
+    -------
+    the distance between two points
+    """
     return ((pos1[0] - pos2[0])**2 + (pos1[1] - pos2[1])**2) ** 0.5
 
+
+
 def distance_to_line_segment(point, start, end):
+    """
+
+    Parameters
+    ----------
+    point
+    start
+    end
+
+    Returns
+    -------
+    the distance between a point and a line segment
+    """
     px,py = point
     x1,y1 = start
     x2,y2 = end
@@ -42,6 +67,17 @@ class Position:
         return f"({self.x:.2f}, {self.y:.2f})"
 
 def calc_euclidean_length(a: Position, b: Position) -> float:
+    """
+
+    Parameters
+    ----------
+    a
+    b
+
+    Returns
+    -------
+    the length of the euclidean distance between two points
+    """
     return math.sqrt((a.x - b.x) ** 2 + (a.y - b.y) ** 2)
 
 class Line:
@@ -51,6 +87,12 @@ class Line:
 
     @property
     def length(self) -> float:
+        """
+
+        Returns
+        -------
+        Length of the line
+        """
         return calc_euclidean_length(self.start, self.end)
 
     def __repr__(self) -> str:
@@ -61,12 +103,12 @@ class Path:
         self.lines = [Line(a,b) for a, b in pairwise(points)]
 
 class Enemy:
-    def __init__(self, path: Path, line=0, line_progress=0, speed: float = 1.0):
+    def __init__(self, path: Path, line=0, line_progress=0, speed: float = 1.0, health: int=30):
         self.path = path
         self.line = line
         self.line_progress = line_progress
         self.speed = speed
-        self.health = 30
+        self.health = health
 
     @property
     def position(self) -> Position:
@@ -84,8 +126,8 @@ class Enemy:
         else:
             return False
 
-    def progress(self, delta_time):
-        self.line_progress += self.speed * delta_time / self.path.lines[self.line].length
+    def progress(self, dt):
+        self.line_progress += self.speed * dt / self.path.lines[self.line].length
         if self.line_progress >= 1:
             self.line_progress -= 1
             self.line += 1
@@ -108,12 +150,27 @@ class Tower:
 
     @property
     def position(self):
+        """
+
+        Returns
+        -------
+        x,y of tower position
+        """
         return (self.x, self.y)
 
     def can_shoot(self, enemies):
+        """
+
+        Parameters
+        ----------
+        enemies
+
+        Returns
+        -------
+        closest enemy to tower
+        """
         targets = []
 
-        # Find all enemies within range
         for enemy in enemies:
             if not enemy.at_end:
                 distance = cart_dist(
@@ -124,15 +181,11 @@ class Tower:
                 if distance <= self.range:
                     targets.append(enemy)
 
-        # Find the closest enemy
         closest_enemy = None
-        closest_distance = 99999999999999
+        closest_distance = float('inf')
 
         for enemy in targets:
-            distance = cart_dist(
-                self.position,
-                (enemy.position.x, enemy.position.y)
-            )
+            distance = cart_dist(self.position,(enemy.position.x, enemy.position.y))
 
             if distance < closest_distance:
                 closest_distance = distance
@@ -141,6 +194,18 @@ class Tower:
         return closest_enemy
 
     def update(self, dt, enemies, projectiles):
+        """
+
+        Parameters
+        ----------
+        dt
+        enemies
+        projectiles
+
+        Returns
+        -------
+        calls the projectile class
+        """
         self.cooldown -= dt
 
         if self.cooldown <= 0:
@@ -162,6 +227,18 @@ class Projectile:
         self.dead = False
 
     def update(self, dt):
+        """
+
+        Parameters
+        ----------
+        dt
+
+        Returns
+        -------
+        Checks if the projectile is dead
+        Works out the distance between the projectile and the enemy
+        Checks if collides with enemy
+        """
         if self.target.health <= 0:
             self.dead = True
             return
@@ -194,23 +271,14 @@ class Game:
         if enemy.path not in self.tracks:
             self.tracks.append(enemy.path)
 
-    def progress(self, delta_time):
+    def progress(self, dt):
         for enemy in self.enemies:
-            enemy.progress(delta_time)
+            enemy.progress(dt)
 
     def print_enemy_positions(self):
         for i, enemy in enumerate(self.enemies):
             print(f'Enemy {i} at {enemy.position};', end=' ')
         print()
-
-    def set_up(self):
-        game_path = Path([Position(0, 0),
-                          Position(50, 0),
-                          Position(50, 50),
-                          Position(100, 100),
-                          ])
-        self.add_enemy(Enemy(game_path, speed=20))
-        self.add_enemy(Enemy(game_path, line=1, speed=100))
 
 
 class GameGUI:
@@ -225,7 +293,7 @@ class GameGUI:
         self.running = True
         self.clock = pygame.time.Clock()
         enemy_path = Path([Position(x, y) for x, y in path_points])
-        self.enemies = [Enemy(enemy_path, speed=150)]
+        self.enemies = [Enemy(enemy_path, speed=500),Enemy(enemy_path, speed=200, health= 100)]
         self.towers = []
         self.projectiles = []
 
@@ -269,7 +337,7 @@ class GameGUI:
     def can_place_tower(self, pos):
         if self.on_path(pos):
             return False
-        if any(cart_dist(pos, tower) < 25 for tower in self.circle_list):
+        if any(cart_dist(pos, tower) < 20 for tower in self.circle_list):
             return False
         return True
 
