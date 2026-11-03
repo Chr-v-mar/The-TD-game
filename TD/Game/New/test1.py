@@ -10,7 +10,8 @@ blue = (0,0,255)
 green = (0,255,0)
 (width, height) = (1500, 750)
 path_points = [(000, 250), (300, 250), (600, 650), (1500, 750)]
-
+image = pygame.image.load("Scout.png")
+image = pygame.transform.scale(image, (30, 20))
 
 def cart_dist(pos1, pos2):
     """
@@ -297,6 +298,7 @@ class GameGUI:
         self.towers = []
         self.projectiles = []
 
+
     def on_path(self, pos):
         path_width = 20
 
@@ -388,6 +390,9 @@ class GameGUI:
             10
         )
 
+
+
+
     def draw_range(self):
         for tower in self.towers:
             # Transparent range circle to fix range stacking
@@ -396,6 +401,7 @@ class GameGUI:
             pygame.draw.circle(range_surface,(0, 0, 255, 35),(tower.range, tower.range),tower.range)
 
             self.screen.blit(range_surface,(tower.x - tower.range, tower.y - tower.range))
+            self.screen.blit(image, (tower.x, tower.y))
 
 
 
