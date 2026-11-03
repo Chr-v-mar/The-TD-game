@@ -322,32 +322,22 @@ class GameGUI:
 
     def draw_range(self):
         for tower in self.towers:
-            # Transparent range circle
-            range_surface = pygame.Surface(
-                (tower.range * 2, tower.range * 2),
-                pygame.SRCALPHA
-            )
+            # Transparent range circle to fix range stacking
+            range_surface = pygame.Surface((tower.range * 2, tower.range * 2),pygame.SRCALPHA)
 
-            pygame.draw.circle(
-                range_surface,
-                (0, 0, 255, 35),
-                (tower.range, tower.range),
-                tower.range
-            )
+            pygame.draw.circle(range_surface,(0, 0, 255, 35),(tower.range, tower.range),tower.range)
 
-            self.screen.blit(
-                range_surface,
-                (tower.x - tower.range, tower.y - tower.range)
-            )
+            self.screen.blit(range_surface,(tower.x - tower.range, tower.y - tower.range))
+
+
+
+    #def draw_range(self):
+        #for tower in self.towers:
+            #pygame.draw.circle(self.screen,blue,(tower.x, tower.y),tower.range,2)
 
     def draw_projectiles(self):
         for projectile in self.projectiles:
-            pygame.draw.circle(
-                self.screen,
-                (0, 0, 0),
-                (int(projectile.x), int(projectile.y)),
-                5
-            )
+            pygame.draw.circle(self.screen,"black",(int(projectile.x), int(projectile.y)),5)
 
     def draw_path(self):
         pygame.draw.lines(self.screen, "yellow", False,path_points , 5)
