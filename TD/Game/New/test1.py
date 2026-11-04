@@ -10,8 +10,10 @@ blue = (0,0,255)
 green = (0,255,0)
 (width, height) = (1500, 750)
 path_points = [(000, 250), (300, 250), (600, 650), (1500, 750)]
-image = pygame.image.load("Scout.png")
+image = pygame.image.load("SCOUT.png")
+image2 = pygame.image.load("SCREECH.png")
 image = pygame.transform.scale(image, (30, 20))
+image2 = pygame.transform.scale(image2, (20, 50))
 
 def cart_dist(pos1, pos2):
     """
@@ -294,7 +296,7 @@ class GameGUI:
         self.running = True
         self.clock = pygame.time.Clock()
         enemy_path = Path([Position(x, y) for x, y in path_points])
-        self.enemies = [Enemy(enemy_path, speed=500),Enemy(enemy_path, speed=200, health= 100)]
+        self.enemies = [Enemy(enemy_path, speed=500),Enemy(enemy_path, speed=200, health= 500)]
         self.towers = []
         self.projectiles = []
 
@@ -426,6 +428,7 @@ class GameGUI:
                 (int(pos.x), int(pos.y)),
                 12
             )
+            self.screen.blit(image2, (pos.x, pos.y))
 
 
 
