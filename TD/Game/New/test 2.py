@@ -16,9 +16,9 @@ image = pygame.transform.scale(image, (30, 20))
 image2 = pygame.transform.scale(image2, (20, 50))
 image3 = pygame.image.load("SCREECH.png")
 image3 = pygame.transform.scale(image3, (1500, 750))
-image3.set_alpha(6) #Testing how to make background for fading winscreen
-image4 = pygame.image.load("SCOUT.png")
-image4 = pygame.transform.scale(image4, (10, 10))
+image3.set_alpha(1) #Testing how to make background for fading winscreen
+image4 = pygame.image.load("SEEK.png")
+image4 = pygame.transform.scale(image4, (20, 20))
 
 def cart_dist(pos1, pos2):
     """
@@ -420,7 +420,7 @@ class GameGUI:
     def draw_projectiles(self):
         for projectile in self.projectiles:
             pygame.draw.circle(self.screen,"black",(int(projectile.x), int(projectile.y)),5)
-            self.screen.blit(image, (int(projectile.x), int(projectile.y)))
+            self.screen.blit(image4, (int(projectile.x), int(projectile.y)))
 
     def draw_path(self):
         pygame.draw.lines(self.screen, "yellow", False,path_points , 5)
