@@ -377,6 +377,7 @@ class GameGUI:
         self.screen.fill(background_colour)
 
 
+
     def draw_towers(self):
         self.pos = pygame.mouse.get_pos()
         for x, y in self.circle_list:
@@ -414,6 +415,7 @@ class GameGUI:
     def draw_projectiles(self):
         for projectile in self.projectiles:
             pygame.draw.circle(self.screen,"black",(int(projectile.x), int(projectile.y)),5)
+
 
     def draw_path(self):
         pygame.draw.lines(self.screen, "yellow", False,path_points , 5)
