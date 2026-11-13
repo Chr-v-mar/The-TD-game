@@ -14,9 +14,9 @@ image = pygame.image.load("SCOUT.png")
 image2 = pygame.image.load("SCREECH.png")
 image = pygame.transform.scale(image, (30, 20))
 image2 = pygame.transform.scale(image2, (20, 50))
-image3 = pygame.image.load("SCREECH.png")
+image3 = pygame.image.load("S_HI.png")
 image3 = pygame.transform.scale(image3, (1500, 750))
-image3.set_alpha(1) #Testing how to make background for fading winscreen
+image3.set_alpha(32) #Testing how to make background for fading winscreen
 image4 = pygame.image.load("SEEK.png")
 image4 = pygame.transform.scale(image4, (20, 20))
 
