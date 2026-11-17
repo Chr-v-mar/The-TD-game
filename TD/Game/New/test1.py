@@ -10,6 +10,9 @@ blue = (0,0,255)
 green = (0,255,0)
 (width, height) = (1500, 750)
 path_points = [(000, 250), (300, 250), (600, 650), (1500, 750)]
+
+tower_cap = 50
+
 image = pygame.image.load("SCOUT.png")
 image2 = pygame.image.load("SCREECH.png")
 image = pygame.transform.scale(image, (30, 20))
@@ -143,13 +146,14 @@ class Enemy:
         return f'Enemy at {self.position}'
 
 class Tower:
-    def __init__(self, x, y, range=180, damage=10, fire_rate=1):
+    def __init__(self, x, y, range=180, damage=10, fire_rate=1, cost :int = 100):
         self.x = x
         self.y = y
         self.range = range
         self.damage = damage
         self.fire_rate = fire_rate
         self.cooldown = 0
+        self.cost = cost
 
     @property
     def position(self):
@@ -226,7 +230,7 @@ class Projectile:
         self.x, self.y = start
         self.target = target
         self.damage = damage
-        self.speed = 400
+        self.speed = 800
         self.dead = False
 
     def update(self, dt):
@@ -298,6 +302,8 @@ class GameGUI:
         enemy_path = Path([Position(x, y) for x, y in path_points])
         self.enemies = [Enemy(enemy_path, speed=500),Enemy(enemy_path, speed=200, health= 500)]
         self.towers = []
+        self.tower_with_range = None
+        self.range_on = False
         self.projectiles = []
 
 
@@ -353,10 +359,16 @@ class GameGUI:
                 if event.button == 1:
                     pos = pygame.mouse.get_pos()
                     if self.can_place_tower(pos):
-                        self.circle_list.append(pos)
-                        self.towers.append(Tower(*pos))
-                    else:
-                        print("Invalid")
+                        if len(self.towers) < tower_cap:
+                            self.circle_list.append(pos)
+                            self.towers.append(Tower(*pos))
+                elif event.button == 3:
+                    pos = pygame.mouse.get_pos()
+                    if not self.can_place_tower(pos):
+                        if not self.range_on:
+                            self.tower_with_range = Tower(*pos)
+                        else:
+                            self.tower_with_range = None
 
 
     def handle_append(self):
@@ -365,6 +377,7 @@ class GameGUI:
     def draw(self):
         self.draw_background()
         self.draw_path()
+
 
         self.draw_range()
         self.draw_towers()
@@ -382,7 +395,7 @@ class GameGUI:
         self.pos = pygame.mouse.get_pos()
         for x, y in self.circle_list:
             pygame.draw.circle(self.screen, red, (x, y), 10)
-        if self.can_place_tower(self.pos):
+        if self.can_place_tower(self.pos) and len(self.towers) < tower_cap:
             preview_colour = green
         else:
             preview_colour = red
@@ -397,14 +410,16 @@ class GameGUI:
 
 
     def draw_range(self):
-        for tower in self.towers:
-            # Transparent range circle to fix range stacking
-            range_surface = pygame.Surface((tower.range * 2, tower.range * 2),pygame.SRCALPHA)
+        # Transparent range circle to fix range stacking
+        if self.tower_with_range is None:
+            return
+        tower = self.tower_with_range
+        range_surface = pygame.Surface((tower.range * 2, tower.range * 2),pygame.SRCALPHA)
 
-            pygame.draw.circle(range_surface,(0, 0, 255, 35),(tower.range, tower.range),tower.range)
+        pygame.draw.circle(range_surface,(0, 0, 255, 35),(tower.range, tower.range),tower.range)
 
-            self.screen.blit(range_surface,(tower.x - tower.range, tower.y - tower.range))
-            self.screen.blit(image, (tower.x, tower.y))
+        self.screen.blit(range_surface,(tower.x - tower.range, tower.y - tower.range))
+        self.screen.blit(image, (tower.x, tower.y))
 
 
 
