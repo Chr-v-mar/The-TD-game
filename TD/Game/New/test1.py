@@ -363,6 +363,7 @@ class GameGUI:
                             self.circle_list.append(pos)
                             self.towers.append(Tower(*pos))
                 elif event.button == 3:
+                    #fix closing range bubbles.
                     pos = pygame.mouse.get_pos()
                     if not self.can_place_tower(pos):
                         if not self.range_on:
@@ -372,6 +373,7 @@ class GameGUI:
 
 
     def handle_append(self):
+        #g(x) = 100 + 200tan(0.25x) -> function for price hike of towers
         pass
 
     def draw(self):
